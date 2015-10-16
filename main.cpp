@@ -27,7 +27,7 @@ void init_data() {
     }
 }
 
-double distance(double x1,int y1,int x2,int y2) {
+double distance(int x1, int y1, int x2, int y2) {
     return sqrts[dsquares[x1][x2] + dsquares[y1][y2]];
 }
 
@@ -60,7 +60,7 @@ class Representation {
             _value = 0;
             for (int i = 0; i < X; i ++) {
                 for (int j = 0; j < Y; j ++) {
-                    double dmin = distance(i,j,positions[0][0],positions[0][0]);
+                    double dmin = distance(i,j,positions[0][0],positions[0][1]);
                     for (int k = 1; k < NUM_GLACIERS; k++) {
                         double d = distance(i,j,positions[k][0],positions[k][1]);
                         if (d < dmin) {
@@ -80,14 +80,14 @@ class Representation {
     }
 
     void mutate_hard() {
-        int changing = rand_range(0,NUM_GLACIERS);
+        int changing = rand_range(0,NUM_GLACIERS-1);
         positions[changing][0] = rand_range(0,X-1);
         positions[changing][1] = rand_range(0,Y-1);
         modified();
     }
 
     void mutate_soft() {
-        positions[rand_range(0,NUM_GLACIERS)][rand_range(0,1)] += rand_range(-1,1);
+        positions[rand_range(0,NUM_GLACIERS-1)][rand_range(0,1)] += rand_range(-1,1);
         modified();
     }
 
@@ -99,7 +99,7 @@ class Representation {
     void fromParents(Representation *r1,Representation *r2) {
         modified();
         int b1 = rand_range(0,NUM_GLACIERS/2);
-        int b2 = rand_range(b1,NUM_GLACIERS);
+        int b2 = rand_range(b1,NUM_GLACIERS-1);
         for (int i = 0; i < b1; i ++) {
             positions[i][0] = r1->positions[i][0];
             positions[i][1] = r1->positions[i][1];
@@ -127,8 +127,8 @@ void print_values(const Representation &r) {
     }
 }
 
-#define GEN_SIZE 512
-#define NUM_GEN 1000
+#define GEN_SIZE 24
+#define NUM_GEN 20000
 #define MUT1_PROBA 0.01
 #define MUT2_PROBA 0.1
 
@@ -144,7 +144,7 @@ int main()
     }
 
     sort(generation.begin(),generation.end(),repr_sorter);
-    cout << "Best at initial generation: value " << generation[0].value() << " data "; print_values(generation[0]); cout << endl;
+    cout << "Best at initial generation: value " << generation[0].value() << endl;
 
     for (int g = 0; g < NUM_GEN; g ++) {
         //selection
