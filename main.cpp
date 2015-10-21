@@ -127,8 +127,8 @@ void print_values(const Representation &r) {
     }
 }
 
-#define GEN_SIZE 24
-#define NUM_GEN 20000
+#define GEN_SIZE 512
+#define NUM_GEN 5000
 #define MUT1_PROBA 0.01
 #define MUT2_PROBA 0.1
 
